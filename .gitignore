@@ -1,0 +1,26 @@
+# GO IGNORE START
+# Server build artifacts
+/bin
+/server/bin
+
+# Binaries, plugins, libs
+*.dll
+*.dylib
+*.exe
+*.exe~
+*.so
+
+# Testing
+*.test
+*.tmp
+
+# Config files
+bin/config.toml
+config.json
+
+# Machine files
+.DS_Store
+
+# IDE Files
+*.iml
+.idea
