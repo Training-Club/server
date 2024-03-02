@@ -1,8 +1,4 @@
 # GO IGNORE START
-# Server build artifacts
-/bin
-/server/bin
-
 # Binaries, plugins, libs
 *.dll
 *.dylib
@@ -15,8 +11,7 @@
 *.tmp
 
 # Config files
-bin/config.toml
-config.json
+bin/config.yaml
 
 # Machine files
 .DS_Store
