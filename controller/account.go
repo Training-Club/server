@@ -2,7 +2,11 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
+	"tc-server/db"
+	"tc-server/model"
+	"tc-server/util"
 )
 
 type AccountController struct {
@@ -39,7 +43,41 @@ func (c *GlobalController) ApplyAccountRoutes(router *gin.Engine) {
 // return a conflict status to inform the client this value is not available.
 func (ac *AccountController) GetAccountAvailability() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		ctx.Status(http.StatusNotImplemented)
+		key := ctx.Param("key")
+		value := ctx.Param("value")
+
+		if key != "username" && key != "email" {
+			util.CreateError(ctx, http.StatusBadRequest, "invalid key, expected 'username' or 'email'")
+			return
+		}
+
+		if key == "username" && !util.ValidateUsername(value) {
+			util.CreateError(ctx, http.StatusBadRequest, "invalid username")
+			return
+		}
+
+		if key == "email" && !util.ValidateEmail(value) {
+			util.CreateError(ctx, http.StatusBadRequest, "invalid email address")
+			return
+		}
+
+		_, err := db.FindDocumentByKeyValue[string, model.Account](db.MongoParams{
+			Client:         ac.GlobalController.Mongo,
+			DBName:         ac.GlobalController.Config.Mongo.DatabaseName,
+			CollectionName: ac.CollectionName,
+		}, key, value)
+
+		if err != nil {
+			if err == mongo.ErrNoDocuments {
+				ctx.Status(http.StatusOK)
+				return
+			}
+
+			util.CreateError(ctx, http.StatusInternalServerError, "failed to perform lookup: "+err.Error())
+			return
+		}
+
+		ctx.Status(http.StatusConflict)
 	}
 }
 
