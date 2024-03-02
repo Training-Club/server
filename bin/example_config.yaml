@@ -1,0 +1,22 @@
+gin:
+  domain: "*.localhost"
+  port: "8080"
+  env: "debug"
+  origins:
+    - "http://localhost"
+    - "http://localhost:3000"
+
+auth:
+  access_token_pub: "tclub321"
+  access_token_ttl: 10
+  refresh_token_pub: "tclub321"
+  refresh_token_ttl: 3600
+
+cache:
+  address: "redis-cache:6379"
+  password: "dev"
+  dbid: 0
+
+mongo:
+  uri: "mongodb://mongodb:27017/"
+  database_name: "dev"

@@ -15,6 +15,7 @@ RUN go mod download
 
 # Copy the rest of the application source code
 COPY . .
+COPY /bin ./bin
 
 # Compile the binary with flags to reduce size and disable CGO
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-w -s" -o main .
@@ -26,6 +27,10 @@ WORKDIR /
 
 # Copy the binary from the builder stage
 COPY --from=builder /app/main .
+
+# Copy the config.yaml file from the project into the container
+# Assuming /bin/config.yaml is relative to the project root in the build context
+COPY --from=builder /app/bin/config.yaml ./bin
 
 # Expose port 8080 (ensure your application is configured to use this port)
 EXPOSE 8080
