@@ -18,7 +18,7 @@ func (c *GlobalController) ApplyAccountRoutes(router *gin.Engine) {
 		CollectionName:   "account",
 	}
 
-	pub := router.GET("/v1/account")
+	pub := router.Group("/v1/account")
 	{
 		pub.GET("/availability/:key/:value", ac.GetAccountAvailability()) // Return if an account field is in available
 		pub.GET("/confirm/:confirmId", ac.Confirm())                      // Confirm a confirmation for email or phone
