@@ -61,6 +61,12 @@ func (ac *AccountController) GetAccountAvailability() gin.HandlerFunc {
 			return
 		}
 
+		// We need to append .value here to properly query it
+		// within MongoDB since it is stored in a Confirmable entry.
+		if key == "email" {
+			key = "email.value"
+		}
+
 		_, err := db.FindDocumentByKeyValue[string, model.Account](db.MongoParams{
 			Client:         ac.GlobalController.Mongo,
 			DBName:         ac.GlobalController.Config.Mongo.DatabaseName,
