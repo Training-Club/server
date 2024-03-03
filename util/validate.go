@@ -34,3 +34,14 @@ func ValidateEmail(s string) bool {
 
 	return rexp.MatchString(s)
 }
+
+// ValidatePassword parses a string input and
+// returns true if the provided string is a vlid
+// password format.
+func ValidatePassword(s string) bool {
+	if len(s) < 6 || len(s) > 32 {
+		return false
+	}
+
+	return true
+}

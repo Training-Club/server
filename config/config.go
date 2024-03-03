@@ -15,10 +15,11 @@ type FullConfig struct {
 }
 
 type GinConfig struct {
-	Domain  string   `yaml:"domain"`
-	Port    string   `yaml:"port"`
-	Env     string   `yaml:"env"`
-	Origins []string `yaml:"origins"`
+	Domain        string   `yaml:"domain"`
+	SigningDomain string   `yaml:"signing_domain"`
+	Port          string   `yaml:"port"`
+	Env           string   `yaml:"env"`
+	Origins       []string `yaml:"origins"`
 }
 
 type AuthConfig struct {
