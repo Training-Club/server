@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type CustomClaims struct {
+type Claims struct {
 	AccountID string `json:"accountId"`
 	jwt.RegisteredClaims
 }
@@ -13,7 +13,7 @@ type CustomClaims struct {
 func GenerateToken(accountId string, publicKey string, ttl int) (string, error) {
 	secret := []byte(publicKey)
 
-	claims := CustomClaims{
+	claims := Claims{
 		accountId,
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(ttl) * time.Minute)),

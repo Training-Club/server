@@ -1,6 +1,10 @@
 package util
 
-import "regexp"
+import (
+	"fmt"
+	"github.com/golang-jwt/jwt/v4"
+	"regexp"
+)
 
 // ValidateUsername parses a string input and
 // returns true if the provided string is a valid
@@ -44,4 +48,15 @@ func ValidatePassword(s string) bool {
 	}
 
 	return true
+}
+
+// ValidateToken parses an encoded token (assumed to be a JWT signed by this service)
+// and will return it as a converted jwt token object.
+func ValidateToken(encoded string, pubkey string) (*jwt.Token, error) {
+	return jwt.Parse(encoded, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("invalid token format %v", token.Header["alg"])
+		}
+		return []byte(pubkey), nil
+	})
 }

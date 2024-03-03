@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"reflect"
 	"tc-server/db"
+	"tc-server/middleware"
 	"tc-server/model"
 	"tc-server/request"
 	"tc-server/response"
@@ -31,11 +32,11 @@ func (c *GlobalController) ApplyAccountRoutes(router *gin.Engine) {
 	{
 		pub.GET("/availability/:key/:value", ac.GetAccountAvailability()) // Return if an account field is in available
 		pub.GET("/confirm/:confirmId", ac.Confirm())                      // Confirm a confirmation for email or phone
-
-		pub.POST("/", ac.CreateAccount()) // Create a new account
+		pub.POST("/", ac.CreateAccount())                                 // Create a new account
 	}
 
 	priv := router.Group("/v1/account")
+	priv.Use(middleware.Authorize(ac.GlobalController.Config))
 	{
 		priv.GET("/", ac.GetAccountByToken())               // Return account matching request token
 		priv.GET("/:key/:value", ac.GetAccountByKeyValue()) // Return simple account info matching the provided key/value combo
