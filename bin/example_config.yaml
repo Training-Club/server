@@ -1,5 +1,6 @@
 gin:
   domain: "*.localhost"
+  signing_domain: "*.trainingclubapp.com"
   port: "8080"
   env: "debug"
   origins:
